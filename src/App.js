@@ -159,7 +159,15 @@ const AppMain = ()=>{
         >
           <div className={s.flex}>
               {
-                POKEMON.map(item => <PokemonCard key={item.id} {...item} />)
+                 POKEMON.map(item => 
+                    <PokemonCard 
+                      key={item.id} 
+                      type={item.type} 
+                      values={item.values} 
+                      name={item.name} 
+                      img={item.img}
+                      id={item.id}  
+                    />)
               }
           </div>
         </Layout>

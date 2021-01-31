@@ -8,13 +8,11 @@ const PokemonCard = ({name, id, type, img, values}) => {
 
     const [isActive, setActive] = useState(false);
     
+    // переворот карточек по клику 
     const handelClick = () => {
         true === isActive ? setActive(false) : setActive(true)      
     }
-    const handelLeave = () => {
-        setActive(false)
-    }
-
+  
     return (
         <div className={s.root} onClick={handelClick} >
             <div className={`${s.pokemonCard} ${isActive? s.active : ''}`}>
