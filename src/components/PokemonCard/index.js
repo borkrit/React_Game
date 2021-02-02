@@ -1,5 +1,5 @@
 import {useState} from 'react'
-
+import cn from 'classnames'
 import s from './style.module.css'
 
 import backSide from './../../assets/card-back-side.jpg'
@@ -10,14 +10,15 @@ const PokemonCard = ({name, id, type, img, values}) => {
     
     // переворот карточек по клику 
     const handelClick = () => {
-        true === isActive ? setActive(false) : setActive(true)      
+        // true === isActive ? setActive(false) : setActive(true)
+        setActive(!isActive)      
     }
   
     return (
         <div className={s.root} onClick={handelClick} >
-            <div className={`${s.pokemonCard} ${isActive? s.active : ''}`}>
+            <div className={cn(s.pokemonCard, {[s.active]:isActive})}>
                 <div className={s.cardFront}>
-                    <div className={`${s.wrap} ${s.front}`}>
+                    <div className={cn(s.wrap,s.front)}>
                         <div className={`${s.pokemon} ${s[type]}`}>
                             <div className={s.values}>
                                 <div className={`${s.count} ${s.top}`}>{values.top}</div>
