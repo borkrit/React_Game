@@ -1,6 +1,9 @@
 import PokemonCard from "../../components/PokemonCard";
 import s from'./style.module.css'
-const POKEMON =[
+import {useState} from 'react'
+
+const GamePage =()=>{
+  const POKEMON =[
     {
       "abilities": [
         "keen-eye",
@@ -134,11 +137,33 @@ const POKEMON =[
       }
     }
   ]
-const GamePage =({onChangeList})=>{
+  
+  // const handleClickCard = (id)=>{
+  //   setPokemon(prevState => {
+  //     return [...prevState].map(pokemon => {
+  //       if(pokemon.id === id){
+  //         pokemon.isActive = !pokemon.isActive;
+
+  //       }
+  //       return pokemons;
+  //     } )
+  //   })
+    
+  // }
+  let [pokemonsList, setActive] = useState(POKEMON.map(p => ({...p, "isActive": false})))
+
+    const handleSetActive = (pokemonId) => {
+        setActive(pokemonsList.map(pokemon => {
+            if (pokemon.id === pokemonId) return {...pokemon, isActive:!pokemon.isActive}
+            return {pokemon}
+        }))
+
+    }
+
 
     const handleClick= ()=> {
         console.log('game1')
-        onChangeList && onChangeList('app');
+        // onChangeList && onChangeList('app');
     }
 
     return (
@@ -149,16 +174,19 @@ const GamePage =({onChangeList})=>{
                     back home 
                 </button>
             </div>
-            <div className={s.flex}>
+            <div className={s.flex} >
               {
-                 POKEMON.map(item => 
+                 pokemonsList.map( pokemon => 
                     <PokemonCard 
-                      key={item.id} 
-                      type={item.type} 
-                      values={item.values} 
-                      name={item.name} 
-                      img={item.img}
-                      id={item.id}  
+                      key={pokemon.id} 
+                      type={pokemon.type} 
+                      values={pokemon.values} 
+                      name={pokemon.name} 
+                      img={pokemon.img}
+                      id={pokemon.id}
+                      isActive={pokemon.isActive}
+                      handleSetActive={handleSetActive}
+                        
                     />)
               }
           </div>
