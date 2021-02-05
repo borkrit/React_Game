@@ -1,9 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import AppMain from './App';
+
+import App from './App';
+import { BrowserRouter } from 'react-router-dom';
 
 
 
-ReactDOM.render(<AppMain />, document.getElementById('root'));
+ReactDOM.render(<BrowserRouter><App /></BrowserRouter>, document.getElementById('root'));
 
