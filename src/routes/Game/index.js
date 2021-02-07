@@ -1,6 +1,8 @@
 import PokemonCard from "../../components/PokemonCard";
 import s from'./style.module.css'
-import {useState} from 'react'
+import {useState, useEffect} from 'react'
+
+import database from '../../service/firebase'
 
 const GamePage =()=>{
   const POKEMON =[
@@ -138,32 +140,58 @@ const GamePage =()=>{
     }
   ]
   
-  // const handleClickCard = (id)=>{
-  //   setPokemon(prevState => {
-  //     return [...prevState].map(pokemon => {
-  //       if(pokemon.id === id){
-  //         pokemon.isActive = !pokemon.isActive;
+ 
+  let [pokemonsList, setActive] = useState({})
 
-  //       }
-  //       return pokemons;
-  //     } )
-  //   })
+  useEffect(() => {
+    database.ref('/pokemons').once('value',(snapshot)=>{
+      setActive(snapshot.val());
+    })
     
-  // }
-  let [pokemonsList, setActive] = useState(POKEMON.map(p => ({...p, "isActive": false})))
+  }, [])
 
-    const handleSetActive = (pokemonId) => {
-        setActive(pokemonsList.map(pokemon => {
-            if (pokemon.id === pokemonId) return {...pokemon, isActive:!pokemon.isActive}
-            return {pokemon}
-        }))
 
+    const handleSetActive = (id) => {
+      setActive(prevState => {
+        return Object.entries(prevState).reduce((acc, item) => {
+          const pokemon = {...item[1]};
+
+          if (pokemon.id === id) {
+            
+            pokemon.isActive = true;
+
+              console.log('prevsdadas',pokemon.isActive)
+              
+              database.ref('pokemons/'+ id).set({
+                ...pokemon,
+                isActive: pokemon.isActive,
+              });
+          };
+
+          acc[item[0]] = pokemon;
+
+          return acc;
+        }, {});
+      });
     }
 
 
     const handleClick= ()=> {
         console.log('game1')
         // onChangeList && onChangeList('app');
+    }
+
+    const handleAddPokemon = (name, type) =>{
+      const newKey = database.ref().child('pokemons').push().key;
+      
+
+      database.ref('pokemons/'+ newKey).set({
+        id: newKey,
+        name: name,
+        type: type,
+        
+      });
+      console.log("wowowowoo")
     }
 
     return (
@@ -174,22 +202,30 @@ const GamePage =()=>{
                     back home 
                 </button>
             </div>
+              <div>
+              <button onClick={handleAddPokemon('poka','fire')}>
+                    ADD Pokemon
+                </button>
+              </div>
+
             <div className={s.flex} >
+            
               {
-                 pokemonsList.map( pokemon => 
+                 Object.entries(pokemonsList).map( ([key,{name, type,img,id,values, isActive}]) => 
                     <PokemonCard 
-                      key={pokemon.id} 
-                      type={pokemon.type} 
-                      values={pokemon.values} 
-                      name={pokemon.name} 
-                      img={pokemon.img}
-                      id={pokemon.id}
-                      isActive={pokemon.isActive}
+                      key={key} 
+                      type={type} 
+                      values={values} 
+                      name={name} 
+                      img={img}
+                      id={id}
+                      isActive={isActive}
                       handleSetActive={handleSetActive}
                         
                     />)
               }
           </div>
+          
         </>
     )
 }

@@ -1,10 +1,22 @@
 import {useState} from 'react'
 import { Switch, Route, useRouteMatch, BrowserRouter, Redirect } from "react-router-dom";
+
+import database from './service/firebase'
+
 import MenuHeader from './components/MenuHeader';
 import AboutPage from './routes/About';
 import ContactPage from './routes/Contact';
 import GamePage from './routes/Game';
 import HomePage from './routes/Home';
+
+
+
+
+
+database.ref('pokemons').once('value', (snapshot)=>{
+    console.log(snapshot.val())
+})
+
 
 const App =()=>{
     const match = useRouteMatch('/');

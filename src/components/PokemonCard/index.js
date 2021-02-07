@@ -9,15 +9,16 @@ const PokemonCard = ({name, id, type, img, values, isActive, handleSetActive }) 
     
     
     // переворот карточек по клику 
-    let handelClick = (id) => {
+    let handelClick = () => {
         // true === isActive ? setActive(false) : setActive(true)
-        handleSetActive(id)
+        handleSetActive && handleSetActive(id)
+        
             
     }
   
     return (
-        <div className={s.root} onClick={()=>handelClick(id)} >
-            <div className={cn(s.pokemonCard, {[s.active]:isActive})} >
+        <div className={s.root}  >
+            <div className={cn(s.pokemonCard, {[s.active]:isActive})}  onClick={()=>handelClick()} >
                 <div className={s.cardFront}>
                     <div className={cn(s.wrap,s.front)}>
                         <div className={`${s.pokemon} ${s[type]}`}>
