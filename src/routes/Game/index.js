@@ -140,14 +140,44 @@ const GamePage =()=>{
     }
   ]
   
+  const DATAONEPOKEMON ={
+    "abilities": [
+      "keen-eye",
+      "tangled-feet",
+      "big-pecks"
+    ],
+    "stats": {
+      "hp": 63,
+      "attack": 60,
+      "defense": 55,
+      "special-attack": 50,
+      "special-defense": 50,
+      "speed": 71
+    },
+    "type": "flying",
+    "img": "",
+    "name": "Vladesa",
+    "base_experience": 122,
+    "height": 11,
+    "id": 100,
+    "values": {
+      "top": "A",
+      "right": 2,
+      "bottom": 7,
+      "left": 5
+    }
+  };
  
   let [pokemonsList, setActive] = useState({})
 
-  useEffect(() => {
+  const getPokemons = () =>{
     database.ref('/pokemons').once('value',(snapshot)=>{
       setActive(snapshot.val());
     })
-    
+  }
+
+  useEffect(() => {
+    getPokemons();    
   }, [])
 
 
@@ -157,19 +187,13 @@ const GamePage =()=>{
           const pokemon = {...item[1]};
 
           if (pokemon.id === id) {
-            
-            pokemon.isActive = true;
-
-              console.log('prevsdadas',pokemon.isActive)
-              
-              database.ref('pokemons/'+ id).set({
-                ...pokemon,
-                isActive: pokemon.isActive,
-              });
-          };
+            pokemon.isActive = !pokemon.isActive;
+          }
 
           acc[item[0]] = pokemon;
 
+          database.ref('pokemons/'+ item[0]).set(pokemon);
+       
           return acc;
         }, {});
       });
@@ -181,32 +205,27 @@ const GamePage =()=>{
         // onChangeList && onChangeList('app');
     }
 
-    const handleAddPokemon = (name, type) =>{
+    const handleAddPokemon = () =>{
+      const data = DATAONEPOKEMON;
       const newKey = database.ref().child('pokemons').push().key;
       
 
-      database.ref('pokemons/'+ newKey).set({
-        id: newKey,
-        name: name,
-        type: type,
-        
-      });
-      console.log("wowowowoo")
+      database.ref('pokemons/'+ newKey).set(data).then(()=>getPokemons());
+      
     }
 
     return (
         <>
-            <div>
+            <div className={s.mar}>
                 GamePage
                 <button onClick={handleClick}>
                     back home 
                 </button>
-            </div>
-              <div>
-              <button onClick={handleAddPokemon('poka','fire')}>
+                <button onClick={handleAddPokemon}>
                     ADD Pokemon
                 </button>
-              </div>
+            </div>
+             
 
             <div className={s.flex} >
             
@@ -224,6 +243,7 @@ const GamePage =()=>{
                         
                     />)
               }
+              
           </div>
           
         </>

@@ -22,12 +22,12 @@ const PokemonCard = ({name, id, type, img, values, isActive, handleSetActive }) 
                 <div className={s.cardFront}>
                     <div className={cn(s.wrap,s.front)}>
                         <div className={`${s.pokemon} ${s[type]}`}>
-                            {/* <div className={s.values}>
+                             <div className={s.values}>
                                 <div className={`${s.count} ${s.top}`}>{values.top}</div>
                                 <div className={`${s.count} ${s.right}`}>{values.right}</div>
                                 <div className={`${s.count} ${s.bottom}`}>{values.bottom}</div>
                                 <div className={`${s.count} ${s.left}`}>{values.left}</div>
-                            </div> */}
+                            </div> 
                             <div className={s.imgContainer}>
                                 <img src={img} alt={name} />
                             </div>
