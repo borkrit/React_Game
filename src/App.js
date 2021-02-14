@@ -8,6 +8,8 @@ import AboutPage from './routes/About';
 import ContactPage from './routes/Contact';
 import GamePage from './routes/Game';
 import HomePage from './routes/Home';
+import { FireBaseContext } from './context/firebaseContext';
+import Firebase from './service/firebase';
 
 
 
@@ -22,7 +24,7 @@ const App =()=>{
     const match = useRouteMatch('/');
     console.log("math",match)
     return (
-        
+       <FireBaseContext.Provider value={new Firebase ()}>
             <Switch>
                 <Route path="/404" render={()=>(
                         <h1>404</h1>
@@ -46,7 +48,7 @@ const App =()=>{
                 
                 
             </Switch>
-            
+        </FireBaseContext.Provider> 
     )
 }
 export default App;
